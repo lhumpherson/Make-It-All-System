@@ -5,18 +5,18 @@ QWidget {
     color: #1e1e1e;               /* dark text for a light background */
 }
 
-/* ---------- Login screen ---------- */
-#loginScreen {
+/* ---------- Login and register screens ---------- */
+#loginScreen, #registerScreen {
     background-color: #ffffff;
 }
 
-/* Labels on the login form ("Email", "Password") */
-#loginScreen QLabel {
-    color: #555555;               /* darker than before so it's readable on white */
+/* Labels on the forms ("Email", "Password") */
+#loginScreen QLabel, #registerScreen QLabel {
+    color: #555555;               /* readable on white */
     font-size: 13px;
 }
 
-/* Text inputs */
+/* Text inputs (same object names on both screens) */
 #emailInput, #passwordInput {
     background-color: #ffffff;
     color: #1e1e1e;               /* typed text */
@@ -31,8 +31,8 @@ QWidget {
     border: 1px solid #f5a623;
 }
 
-/* Login button */
-#loginButton {
+/* Main action buttons */
+#loginButton, #registerButton {
     background-color: #f5a623;
     color: #1e1e1e;
     border: 1px solid #000000;    /* black border */
@@ -42,11 +42,11 @@ QWidget {
     margin-top: 20px;             /* extra gap above the button */
 }
 
-#loginButton:hover {
+#loginButton:hover, #registerButton:hover {
     background-color: #ffb84d;
 }
 
-#loginButton:pressed {
+#loginButton:pressed, #registerButton:pressed {
     background-color: #d98e12;
 }
 
@@ -55,7 +55,8 @@ QWidget {
     color: #d32f2f;               /* darker red, readable on white */
 }
 
-#loginBox {
+/* The card around each form */
+#loginBox, #registerBox {
     background-color: #ffffff;
     border: 1px solid #d0d0d0;
     border-radius: 1px;

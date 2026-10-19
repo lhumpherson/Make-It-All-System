@@ -69,7 +69,7 @@ class LoginScreen(QWidget):
 
         # Centres the Login Box
         outer_layout = QHBoxLayout()
-        outer_layout.addStretch(1) # Factor 1 so the stretches take all the spare width. With 0, the form gets a third of the window and sits off-centre
+        outer_layout.addStretch(1) # Factor 1 so the stretches take all the spare width. With 0, the box gets a third of the window and sits off-centre
         outer_layout.addWidget(loginBox, alignment=Qt.AlignmentFlag.AlignVCenter)
         outer_layout.addStretch(1)               
         self.setLayout(outer_layout)

@@ -4,12 +4,16 @@ from PySide6.QtWidgets import QApplication, QFrame, QWidget, QLineEdit, QFormLay
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 from pathlib import Path
+from app import auth
 
 class LoginScreen(QWidget):
     def __init__(self, parent=None):
         super(LoginScreen, self).__init__(parent)
         self.setWindowTitle("Login")
         self.setObjectName("loginScreen")
+        self.errorLabel = QLabel("")
+        self.errorLabel.setObjectName("errorLabel")   
+        self.errorLabel.setWordWrap(True)
 
         PADDING = 32
         FIELD_WIDTH = 300 
@@ -57,6 +61,7 @@ class LoginScreen(QWidget):
         loginForm.setContentsMargins(PADDING, 24, PADDING, PADDING)
         loginForm.addRow("Email", self.emailInput)
         loginForm.addRow("Password", self.passwordInput)
+        loginForm.addRow(self.errorLabel)            
         loginForm.addRow(self.loginButton)
 
         # Styles the inside of the login box
@@ -77,7 +82,24 @@ class LoginScreen(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True) #Sets background colour from styles.qss
 
     def handleLogin(self):
-        print(self.emailInput.text())
+        email = self.emailInput.text()
+        password = self.passwordInput.text()
+
+        if not email.strip() or not password:
+            self.errorLabel.setText("Please enter your email and password.")
+            return
+        
+        user = auth.signIn(email, password)
+
+        if user is None:
+            self.errorLabel.setText("Incorrect email or password.")
+            self.passwordInput.clear()
+            return
+
+        self.errorLabel.setText("")
+        print(f"Logged in as {user['name']}")
+
+
 
 
 if __name__ == '__main__':

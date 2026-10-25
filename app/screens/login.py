@@ -2,11 +2,14 @@
 import sys
 from PySide6.QtWidgets import QApplication, QFrame, QWidget, QLineEdit, QFormLayout, QHBoxLayout, QPushButton, QLabel, QVBoxLayout
 from PySide6.QtGui import QPixmap
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Signal
 from pathlib import Path
 from app import auth
+from app.screens.register import RegisterScreen
 
 class LoginScreen(QWidget):
+    joinRequested = Signal()  
+
     def __init__(self, parent=None):
         super(LoginScreen, self).__init__(parent)
         self.setWindowTitle("Login")
@@ -14,6 +17,12 @@ class LoginScreen(QWidget):
         self.errorLabel = QLabel("")
         self.errorLabel.setObjectName("errorLabel")   
         self.errorLabel.setWordWrap(True)
+
+        self.joinButton = QPushButton("New Employee? Join here")
+        self.joinButton.setObjectName("linkButton")         
+        self.joinButton.setFlat(True)                           
+        self.joinButton.setCursor(Qt.CursorShape.PointingHandCursor) 
+        self.joinButton.clicked.connect(self.joinRequested.emit) 
 
         PADDING = 32
         FIELD_WIDTH = 300 
@@ -63,6 +72,7 @@ class LoginScreen(QWidget):
         loginForm.addRow("Password", self.passwordInput)
         loginForm.addRow(self.errorLabel)            
         loginForm.addRow(self.loginButton)
+        loginForm.addRow(self.joinButton)
 
         # Styles the inside of the login box
         boxLayout = QVBoxLayout()
@@ -94,10 +104,11 @@ class LoginScreen(QWidget):
         if user is None:
             self.errorLabel.setText("Incorrect email or password.")
             self.passwordInput.clear()
+            self.passwordInput.setFocus()
             return
 
         self.errorLabel.setText("")
-        print(f"Logged in as {user['name']}")
+        print(f"Logged in as {user['name']}") #Output for correct Login -> Modify to load the appropriate page according to user role
 
 
 
@@ -108,5 +119,13 @@ if __name__ == '__main__':
     # Create and show the form
     window = LoginScreen()
     window.showMaximized()
+
+    def openRegister():
+        window.registerScreen = RegisterScreen()  
+        window.registerScreen.showMaximized()
+        window.hide()
+
+    window.joinRequested.connect(openRegister)
+    
     # Run the main Qt loop
     sys.exit(app.exec())

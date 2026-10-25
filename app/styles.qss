@@ -51,7 +51,7 @@ QWidget {
 }
 
 /* Error message under the form (for when validation is added) */
-#errorLabel {
+#loginScreen #errorLabel, #registerScreen #errorLabel {
     color: #d32f2f;               /* darker red, readable on white */
 }
 
@@ -60,4 +60,16 @@ QWidget {
     background-color: #ffffff;
     border: 1px solid #d0d0d0;
     border-radius: 1px;
+}
+
+#linkButton {
+    background: transparent;
+    border: none;
+    color: #1a73e8;
+    text-decoration: underline;
+    margin-top: 12px;
+}
+
+#linkButton:hover {
+    color: #0b57d0;
 }

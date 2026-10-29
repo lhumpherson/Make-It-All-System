@@ -5,7 +5,7 @@ from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt, Signal
 from pathlib import Path
 from app import auth
-from app.screens.register import RegisterScreen
+#from app.screens.register import RegisterScreen # This line should be move to main.py when merged with rest of code
 
 class LoginScreen(QWidget):
     joinRequested = Signal()  

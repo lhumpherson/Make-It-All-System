@@ -73,3 +73,11 @@ QWidget {
 #linkButton:hover {
     color: #0b57d0;
 }
+
+#emailInput, #passwordInput, #nameInput, #confirmPasswordInput {
+    /* existing properties unchanged */
+}
+
+#emailInput:focus, #passwordInput:focus, #confirmPasswordInput:focus {
+    border: 1px solid #f5a623;
+}

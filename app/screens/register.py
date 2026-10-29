@@ -4,7 +4,8 @@ from PySide6.QtWidgets import QApplication, QFrame, QWidget, QLineEdit, QFormLay
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt, Signal
 from pathlib import Path
-from app.screens.login import LoginScreen # This line should be move to main.py when merged with rest of code
+from app.screens.login import LoginScreen 
+from app import auth
 
 class RegisterScreen(QWidget):
     joinRequested = Signal()
@@ -18,6 +19,13 @@ class RegisterScreen(QWidget):
         FIELD_WIDTH = 300 
         BOX_WIDTH = FIELD_WIDTH + (2 * PADDING)
 
+        # Creating the name input
+        self.nameInput = QLineEdit()
+        self.nameInput.setObjectName("nameInput")
+        self.nameInput.setPlaceholderText("Full name")
+        self.nameInput.setMinimumWidth(FIELD_WIDTH)
+        self.nameInput.setMaximumWidth(FIELD_WIDTH)
+
         # Creating email and password inputs
         self.emailInput = QLineEdit()
         self.passwordInput = QLineEdit()
@@ -28,21 +36,17 @@ class RegisterScreen(QWidget):
 
         self.passwordInput.setPlaceholderText("Password")
         self.emailInput.setPlaceholderText("@make-it-all.co.uk")
-        self.emailInput.setMinimumWidth(300)
-        self.passwordInput.setMinimumWidth(300)
-        self.emailInput.setMaximumWidth(300)
-        self.passwordInput.setMaximumWidth(300)
+        self.emailInput.setMinimumWidth(FIELD_WIDTH)
+        self.passwordInput.setMinimumWidth(FIELD_WIDTH)
+        self.emailInput.setMaximumWidth(FIELD_WIDTH)
+        self.passwordInput.setMaximumWidth(FIELD_WIDTH)
 
         self.confirmPasswordInput = QLineEdit()
         self.confirmPasswordInput.setObjectName("confirmPasswordInput")
         self.confirmPasswordInput.setEchoMode(QLineEdit.EchoMode.Password)
         self.confirmPasswordInput.setPlaceholderText("Re-enter password")
-        self.confirmPasswordInput.setMinimumWidth(300)
-        self.confirmPasswordInput.setMaximumWidth(300)
-
-        self.passwordHint = QLabel("At least 12 characters")
-        self.passwordHint.setObjectName("hintLabel")
-        self.passwordHint.setWordWrap(True)
+        self.confirmPasswordInput.setMinimumWidth(FIELD_WIDTH)
+        self.confirmPasswordInput.setMaximumWidth(FIELD_WIDTH)
 
         # Error message, empty until a check fails
         self.errorLabel = QLabel("")
@@ -62,11 +66,13 @@ class RegisterScreen(QWidget):
 
         self.registerButton = QPushButton("Register")
         self.registerButton.setObjectName("registerButton")
-        self.registerButton.setMinimumWidth(300)
-        self.registerButton.setMaximumWidth(300)
+        self.registerButton.setMinimumWidth(FIELD_WIDTH)
+        self.registerButton.setMaximumWidth(FIELD_WIDTH)
         self.registerButton.clicked.connect(self.handleRegister)
+        self.nameInput.returnPressed.connect(self.handleRegister)
         self.emailInput.returnPressed.connect(self.handleRegister)
         self.passwordInput.returnPressed.connect(self.handleRegister)
+        self.confirmPasswordInput.returnPressed.connect(self.handleRegister)
 
         # Adding the image
         logoPath = Path(__file__).resolve().parent.parent / "assets" / "Make-it-All-Logo.png"
@@ -80,9 +86,9 @@ class RegisterScreen(QWidget):
         registerForm.setFieldGrowthPolicy(QFormLayout.FieldGrowthPolicy.FieldsStayAtSizeHint) # Stops fields growing beyond their size
         registerForm.setRowWrapPolicy(QFormLayout.RowWrapPolicy.WrapAllRows) # Puts each label above its field instead of beside it
         registerForm.setContentsMargins(PADDING, 24, PADDING, PADDING)
+        registerForm.addRow("Full name", self.nameInput)
         registerForm.addRow("Email", self.emailInput)
-        registerForm.addRow("Password", self.passwordInput)
-        registerForm.addRow(self.passwordHint)                
+        registerForm.addRow("Password (At least 12 characters)", self.passwordInput)
         registerForm.addRow("Confirm password", self.confirmPasswordInput)
         registerForm.addRow(self.errorLabel)              
         registerForm.addRow(self.registerButton)
@@ -106,24 +112,65 @@ class RegisterScreen(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True) # Sets background colour from styles.qss
 
     def handleRegister(self):
-        # this function loads the login page
-        print(self.emailInput.text())
+        name = self.nameInput.text().strip()
+        email = self.emailInput.text()
+        password = self.passwordInput.text()
+        confirm = self.confirmPasswordInput.text()
+
+        #Every field filled in
+        if not name or not email.strip() or not password or not confirm:
+            self.showError("Please fill in all fields.")
+            return
+
+        #Company email
+        if not auth.isCompanyEmail(email):
+            self.showError("Please use your @make-it-all.co.uk email address.", self.emailInput)
+            return
+
+        #One account per email
+        if auth.emailExists(email):
+            self.showError("An account with this email already exists.", self.emailInput)
+            return
+
+        #Strong password (NCSC rules)
+        passwordError = auth.checkPassword(password, email)
+        if passwordError:
+            self.showError(passwordError, self.passwordInput)
+            return
+
+        #Passwords match
+        if password != confirm:
+            self.confirmPasswordInput.clear()
+            self.showError("Passwords don't match.", self.confirmPasswordInput)
+            return
+
+        # All checks passed: create the account, then go to login
+        auth.registerUser(name, email, password)
+        self.errorLabel.setText("")
+        self.joinRequested.emit()
+
+    def showError(self, message, field=None):
+        """Show an error and, if given, put the cursor in the field that needs fixing."""
+        self.errorLabel.setText(message)
+        if field is not None:
+            field.setFocus()
+
 
 
 if __name__ == '__main__':
+
     app = QApplication(sys.argv)
     app.setStyleSheet((Path(__file__).resolve().parent.parent / "styles.qss").read_text())
     # Create and show the form
     window = RegisterScreen()
     window.showMaximized()
-    # Run the main Qt loop
 
     def openLogin():
-        window.loginScreen = LoginScreen()  
+        window.loginScreen = LoginScreen()   
         window.loginScreen.showMaximized()
         window.hide()
 
     window.joinRequested.connect(openLogin)
-    
 
+    # Run the main Qt loop
     sys.exit(app.exec())

@@ -17,13 +17,18 @@ QWidget {
 }
 
 /* Text inputs (same object names on both screens) */
-#emailInput, #passwordInput {
+#emailInput, #passwordInput, #confirmPasswordInput, #nameInput {
     background-color: #ffffff;
     color: #1e1e1e;               /* typed text */
     border: 1px solid #000000;    /* black border */
     border-radius: 6px;
     padding: 8px 10px;
     margin-bottom: 20px;          /* gap below each input */
+}
+
+/* Highlight the input being typed in */
+#emailInput:focus, #passwordInput:focus, #confirmPasswordInput:focus, #nameInput:focus {
+    border: 1px solid #f5a623;
 }
 
 /* Highlight the input being typed in */
@@ -55,6 +60,7 @@ QWidget {
     color: #d32f2f;               /* darker red, readable on white */
 }
 
+
 /* The card around each form */
 #loginBox, #registerBox {
     background-color: #ffffff;
@@ -74,10 +80,10 @@ QWidget {
     color: #0b57d0;
 }
 
-#emailInput, #passwordInput, #nameInput, #confirmPasswordInput {
-    /* existing properties unchanged */
+/* Password guidance under the password field */
+#registerScreen #hintLabel {
+    color: #777777;
+    font-size: 12px;
+    margin-bottom: 16px;          /* separates the hint from the next field's label */
 }
 
-#emailInput:focus, #passwordInput:focus, #confirmPasswordInput:focus {
-    border: 1px solid #f5a623;
-}

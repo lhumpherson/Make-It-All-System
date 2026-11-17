@@ -45,6 +45,14 @@ USERS = [
         "name": "George Smith",
         "role": "Manager",
         "teamIds": [1, 2], 
+    },
+    {
+        "id": 2,
+        "email": "A.H@make-it-all.co.uk",
+        "password": "123",
+        "name": "George Smith",
+        "role": "Manager",
+        "teamIds": [1, 2], 
     }
 ]
 

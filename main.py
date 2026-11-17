@@ -6,7 +6,7 @@ from pathlib import Path
 from app.screens.login import LoginScreen
 from app.screens.register import RegisterScreen
 from app.main_window import createMainWindow
-
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QApplication, QStackedWidget
 
 
@@ -15,6 +15,7 @@ def main():
     app = QApplication(sys.argv)
     stylesPath = Path(__file__).resolve().parent / "app" / "styles.qss"
     app.setStyleSheet(stylesPath.read_text())
+    app.styleHints().setColorScheme(Qt.ColorScheme.Light) 
 
     # loads the login and register screens into a stacked widget so its more fluid to switch between them
     authWindow = QStackedWidget()

@@ -1,29 +1,37 @@
-/* Global Qt stylesheet: colours, fonts and widget styles for the whole app. */
+/* Global Qt stylesheet: colours, fonts and widget styles for the whole app.
+   Palette (neutral base, single blue accent, WCAG AA contrast):
+   Canvas      #f5f5f5   Surface   #ffffff
+   Text        #242424   Secondary #424242   Muted #616161
+   Border      #d1d1d1   Divider   #e0e0e0
+   Primary     #0f6cbd   Hover     #115ea3   Pressed #0e4f8a
+   Error       #b91c1c
+   Brand accent (logo and active nav highlight only)  #f5a623 */
 
 
 
 /* -Prathams styles: */
 QFrame#card {
-    background-color: #f5a623;
+    background-color: #ffffff;    /* white card on the grey canvas */
     padding: 16px;
     border-radius: 8px;
-    border: 1px solid #000000;
+    border: 1px solid #e0e0e0;    /* subtle divider grey */
 }
 
 QProgressBar {
-    background-color: #ffffff;
+    background-color: #e0e0e0;    /* grey track, so the empty part is visible on a white card */
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     text-align: center;
+    color: #242424;
 }
 
 QProgressBar::chunk {
-    background-color: #07da5e;
-    border-radius: 6px;
+    background-color: #0f6cbd;    /* primary blue: progress, not "success" */
+    border-radius: 4px;
 }
-QWidget#window{
-    background-color: #ffffff;
 
+QWidget#window {
+    background-color: #f5f5f5;    /* grey canvas so the white cards stand out */
 }
 
 
@@ -36,92 +44,202 @@ QWidget#window{
 QWidget {
     font-family: "Segoe UI", sans-serif;
     font-size: 14px;
-    color: #1e1e1e;               /* dark text for a light background */
+    color: #242424;               /* primary text */
 }
 
 /* ---------- Login and register screens ---------- */
 
 #loginScreen, #registerScreen {
-    background-color: #ffffff;
+    background-color: #f5f5f5;    /* light grey canvas so the white card stands out */
 }
 
 /* Labels on the forms ("Email", "Password") */
 #loginScreen QLabel, #registerScreen QLabel {
-    color: #555555;               /* readable on white */
+    color: #424242;               /* secondary text */
     font-size: 13px;
 }
 
 /* Text inputs (same object names on both screens) */
 #emailInput, #passwordInput, #confirmPasswordInput, #nameInput {
     background-color: #ffffff;
-    color: #1e1e1e;               /* typed text */
-    border: 1px solid #000000;    /* black border */
-    border-radius: 6px;
+    color: #242424;               /* typed text */
+    border: 1px solid #d1d1d1;    /* light grey border */
+    border-radius: 4px;
     padding: 8px 10px;
     margin-bottom: 20px;          /* gap below each input */
 }
 
 /* Highlight the input being typed in */
 #emailInput:focus, #passwordInput:focus, #confirmPasswordInput:focus, #nameInput:focus {
-    border: 1px solid #f5a623;
-}
-
-/* Highlight the input being typed in */
-#emailInput:focus, #passwordInput:focus {
-    border: 1px solid #f5a623;
+    border: 1px solid #0f6cbd;    /* primary blue */
 }
 
 /* Main action buttons */
 #loginButton, #registerButton {
-    background-color: #f5a623;
-    color: #1e1e1e;
-    border: 1px solid #000000;    /* black border */
-    border-radius: 6px;
+    background-color: #0f6cbd;    /* primary blue */
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
     padding: 10px;
-    font-weight: bold;
+    font-weight: 600;
     margin-top: 20px;             /* extra gap above the button */
 }
 
 #loginButton:hover, #registerButton:hover {
-    background-color: #ffb84d;
+    background-color: #115ea3;
 }
 
 #loginButton:pressed, #registerButton:pressed {
-    background-color: #d98e12;
+    background-color: #0e4f8a;
 }
 
-/* Error message under the form (for when validation is added) */
+/* Error message under the form */
 #loginScreen #errorLabel, #registerScreen #errorLabel {
-    color: #d32f2f;               /* darker red, readable on white */
+    color: #b91c1c;               /* red, readable on white */
 }
 
 
 /* The card around each form */
 #loginBox, #registerBox {
     background-color: #ffffff;
-    border: 1px solid #d0d0d0;
-    border-radius: 1px;
+    border: 1px solid #e0e0e0;    /* subtle divider grey */
+    border-radius: 8px;
 }
 
 #linkButton {
     background: transparent;
     border: none;
-    color: #1a73e8;
-    text-decoration: underline;
+    color: #0f6cbd;               /* primary blue */
     margin-top: 12px;
 }
 
 #linkButton:hover {
-    color: #0b57d0;
+    color: #115ea3;
+    text-decoration: underline;   /* underline on hover only */
 }
 
 /* Password guidance under the password field */
 #registerScreen #hintLabel {
-    color: #777777;
+    color: #616161;               /* muted text, passes WCAG contrast */
     font-size: 12px;
     margin-bottom: 16px;          /* separates the hint from the next field's label */
 }
 
-
+/* The grey question before the link */
+#loginScreen #linkPrompt, #registerScreen #linkPrompt {
+    color: #616161;
+    margin-top: 12px;
+}
 
 /* end of andy's styles */
+
+
+
+
+/* Start of To-do List Styles */ 
+
+/* Add task button: the screen's main action */
+#addTaskButton {
+    background-color: #0f6cbd;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-weight: 600;
+}
+
+#addTaskButton:hover {
+    background-color: #115ea3;
+}
+
+#addTaskButton:pressed {
+    background-color: #0e4f8a;
+}
+
+/* Task list: a white card holding the tasks */
+#todoScreen QListWidget {
+    background-color: #ffffff;
+    color: #242424;
+    border: 1px solid #e0e0e0;    /* subtle divider grey */
+    border-radius: 8px;
+    padding: 4px;
+}
+
+#todoScreen QListWidget::item {
+    padding: 8px;
+    border-bottom: 1px solid #f0f0f0;   /* faint line between tasks */
+}
+
+#todoScreen QListWidget::item:hover {
+    background-color: #f5f5f5;
+}
+
+#todoScreen QListWidget::item:selected {
+    background-color: #e8f0fb;    /* light blue highlight */
+    color: #242424;               /* keep text dark so it stays readable */
+}
+
+/* Styles for the scroll bar inside of todo.py */
+QScrollBar:vertical {
+    background: transparent;
+    width: 14px;                  /* wider than the default, easier to click and drag */
+    margin: 0;
+}
+
+QScrollBar::handle:vertical {
+    background: #c2c2c2;          /* mid grey, visible on white and grey backgrounds */
+    border-radius: 7px;           /* half the width, so the handle has rounded ends */
+    min-height: 40px;             /* never shrinks too small to grab, even with many tasks */
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #a6a6a6;          /* darkens on hover so users know it can be dragged */
+}
+
+QScrollBar::handle:vertical:pressed {
+    background: #8a8a8a;
+}
+
+/* Hide the arrow buttons at each end, which modern apps don't show */
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0;
+}
+
+/* The empty track above and below the handle */
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background: none;
+}
+
+/* Each column: an outlined box with square corners, like the sketch */
+#boardColumn {
+    background-color: #ebebeb;
+    border: 1px solid #000000;    /* black outline */
+    border-radius: 0px;           /* square corners */
+}
+
+/* Column title with a black line underneath that runs edge to edge */
+#columnHeader {
+    font-weight: 600;
+    font-size: 15px;
+    color: #242424;
+    border: none;
+    border-bottom: 1px solid #000000;   /* the divider line under the title */
+    padding: 10px 12px;                 /* the title's own padding, now that the column has none */
+}
+
+#boardColumn QScrollArea,
+#boardColumn #qt_scrollarea_viewport,
+#boardColumn #cardsContainer {
+    background: transparent;
+    border: none;
+}
+
+#taskCard {
+    background-color: #ffffff;
+    border: 1px solid #d1d1d1;
+    border-radius: 6px;
+}
+
+/* Start of To-do List Styles */ 

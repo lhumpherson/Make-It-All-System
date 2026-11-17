@@ -52,11 +52,22 @@ class RegisterScreen(QWidget):
         self.errorLabel.setObjectName("errorLabel")
         self.errorLabel.setWordWrap(True)
 
-        self.loginLink = QPushButton("Already have an account? Login here")
-        self.loginLink.setObjectName("linkButton")                    
-        self.loginLink.setFlat(True)                                  # no button background
-        self.loginLink.setCursor(Qt.CursorShape.PointingHandCursor)   # hand cursor on hover
-        self.loginLink.clicked.connect(self.joinRequested.emit)      
+        # Grey question text, with only the action words as the blue link
+        self.loginPrompt = QLabel("Already have an account?")
+        self.loginPrompt.setObjectName("linkPrompt")
+
+        self.loginLink = QPushButton("Log in")
+        self.loginLink.setObjectName("linkButton")
+        self.loginLink.setFlat(True)
+        self.loginLink.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.loginLink.clicked.connect(self.joinRequested.emit)
+
+        # Both on one line, centred under the form
+        loginRow = QHBoxLayout()
+        loginRow.addStretch(1)
+        loginRow.addWidget(self.loginPrompt)
+        loginRow.addWidget(self.loginLink)
+        loginRow.addStretch(1)  
 
         # Creating the register box and register button
         registerForm = QFormLayout()
@@ -91,7 +102,7 @@ class RegisterScreen(QWidget):
         registerForm.addRow("Confirm password", self.confirmPasswordInput)
         registerForm.addRow(self.errorLabel)              
         registerForm.addRow(self.registerButton)
-        registerForm.addRow(self.loginLink)
+        registerForm.addRow(loginRow)
 
         # Styles the inside of the register box
         boxLayout = QVBoxLayout()

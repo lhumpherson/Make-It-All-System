@@ -19,11 +19,22 @@ class LoginScreen(QWidget):
         self.errorLabel.setObjectName("errorLabel")   
         self.errorLabel.setWordWrap(True)
 
-        self.joinButton = QPushButton("New Employee? Join here")
-        self.joinButton.setObjectName("linkButton")         
-        self.joinButton.setFlat(True)                           
-        self.joinButton.setCursor(Qt.CursorShape.PointingHandCursor) 
-        self.joinButton.clicked.connect(self.joinRequested.emit) 
+        # Grey question text, with only the action words as the blue link
+        self.joinPrompt = QLabel("New employee?")
+        self.joinPrompt.setObjectName("linkPrompt")
+
+        self.joinButton = QPushButton("Register here")
+        self.joinButton.setObjectName("linkButton")
+        self.joinButton.setFlat(True)
+        self.joinButton.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.joinButton.clicked.connect(self.joinRequested.emit)
+
+        # Both on one line, centred under the form
+        joinRow = QHBoxLayout()
+        joinRow.addStretch(1)
+        joinRow.addWidget(self.joinPrompt)
+        joinRow.addWidget(self.joinButton)
+        joinRow.addStretch(1)
 
         PADDING = 32
         FIELD_WIDTH = 300 
@@ -73,7 +84,7 @@ class LoginScreen(QWidget):
         loginForm.addRow("Password", self.passwordInput)
         loginForm.addRow(self.errorLabel)            
         loginForm.addRow(self.loginButton)
-        loginForm.addRow(self.joinButton)
+        loginForm.addRow(joinRow)
 
         # Styles the inside of the login box
         boxLayout = QVBoxLayout()
